@@ -9,4 +9,4 @@ for (var i = 0; i < dishes.length; i++) {
 	}
 }
 
-[dish.parentElement.parentElement.getAttribute("data-categoryid"), dish.parentElement.parentElement.getAttribute("data-dishid")];
+[dish.parentElement.parentElement.getAttribute("data-categoryid"), dish.parentElement.parentElement.getAttribute("data-dishid"), dish.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute("data-res-id")];

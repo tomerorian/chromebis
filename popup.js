@@ -9,7 +9,12 @@ function getParameterByName(queryString, name) {
     var regex = new RegExp("(?:[?&]|^)" + name + "=([^&#]*)");
     // Attempt to get a match
     var results = regex.exec(queryString);
-    return decodeURIComponent(results[1].replace(/\+/g, " ")) || '';
+
+    if (results) {
+      return decodeURIComponent(results[1].replace(/\+/g, " ")) || '';
+    } else {
+      return "";
+    }
 }
 
 function setRest(restId) {
@@ -32,9 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
   chrome.tabs.getSelected(null, function(tab) {
     var queryString = /^[^#?]*(\?[^#]+|)/.exec(tab.url)[1];
 
-    restId = getParameterByName(queryString, "resId");
-    setRest(restId);
-
     chrome.tabs.executeScript(null, 
       { 
         code: "var x = document.getElementsByClassName(\"dishContent_dishName\"); if (x.length > 0) { var chromeBisDishName = x[0].textContent; }" 
@@ -47,6 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
           function(dishDiv) {
             categoryId = dishDiv[0][0];
             dishId = dishDiv[0][1];
+            restId = dishDiv[0][2];
+            setRest(restId);
             setCategory(categoryId);
             setDish(dishId);
             setCommand(`./main.py --rest ${restId} --cat ${categoryId} --dish ${dishId}`)
